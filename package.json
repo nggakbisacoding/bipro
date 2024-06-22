@@ -29,6 +29,7 @@
     "@ant-design/icons": "^5.2.6",
     "@ant-design/plots": "^2.1.5",
     "antd": "^5.12.5",
+    "concurrently": "^8.2.2",
     "dayjs": "^1.11.10",
     "radash": "^11.0.0",
     "rc-virtual-list": "^3.11.3",

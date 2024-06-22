@@ -17,7 +17,7 @@ class PasswordExpiredController
     {
         abort_unless(config('boilerplate.access.user.password_expires_days'), 404);
 
-        return view('frontend.auth.passwords.expired');
+        return view('frontend.auth.password.expired');
     }
 
     /**
