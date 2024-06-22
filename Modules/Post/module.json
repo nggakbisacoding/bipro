@@ -1,0 +1,9 @@
+{
+  "name": "Post",
+  "alias": "post",
+  "description": "",
+  "keywords": [],
+  "priority": 2,
+  "providers": ["Modules\\Post\\Providers\\PostServiceProvider"],
+  "files": []
+}

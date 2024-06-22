@@ -1,0 +1,15 @@
+.git/
+vendor/
+node_modules/
+public/js/
+public/css/
+public/build/
+yarn-error.log
+_ide_*
+phpstan*
+README.md
+*.rdb
+.env*
+.flaskenv*
+!.env.project
+!.env.vault

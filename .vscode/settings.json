@@ -1,0 +1,20 @@
+{
+  "phpsab.executablePathCBF": "./vendor/bin/phpcbf",
+  "phpsab.fixerEnable": true,
+  "phpsab.snifferShowSources": true,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit"
+  },
+  "[vue]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[php]": {
+    "editor.defaultFormatter": "open-southeners.laravel-pint"
+  },
+  "editor.tabSize": 2
+}

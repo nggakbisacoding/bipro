@@ -1,0 +1,15 @@
+<?php
+
+namespace $NAMESPACE$;
+
+use App\Models\Model;
+
+class $CLASS$ extends Model
+{
+    protected $fillable = $FILLABLE$;
+    
+    protected static function newFactory()
+    {
+        return \$MODULE_NAMESPACE$\$MODULE$\Database\Factories\$NAME$Factory::new();
+    }
+}

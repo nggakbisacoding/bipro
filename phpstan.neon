@@ -1,0 +1,24 @@
+includes:
+    - ./vendor/nunomaduro/larastan/extension.neon
+
+parameters:
+
+    paths:
+        - app/
+
+    # Level 9 is the highest level
+    level: 5
+
+    treatPhpDocTypesAsCertain: false
+
+    universalObjectCratesClasses:
+        - Illuminate\Http\Resources\Json\JsonResource
+        - Illuminate\Http\Resources\Json\ResourceCollection
+
+#    ignoreErrors:
+#        - '#PHPDoc tag @var#'
+#
+#    excludePaths:
+#        - ./*/*/FileToBeExcluded.php
+#
+#    checkMissingIterableValueType: false

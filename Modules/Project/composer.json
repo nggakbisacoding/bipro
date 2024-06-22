@@ -1,0 +1,23 @@
+{
+    "name": "kahasolusi/project",
+    "description": "",
+    "authors": [
+        {
+            "name": "PT. Kaha Solusi Indonesia",
+            "email": "tech@gkahasolusi.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Project\\": ""
+        }
+    }
+}

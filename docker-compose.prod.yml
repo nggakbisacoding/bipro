@@ -1,0 +1,136 @@
+version: '3.8'
+
+services:
+  ####################################################################################################
+  # PHP
+  ####################################################################################################
+  app:
+    restart: unless-stopped
+    container_name: bipro
+    image: agungkes/bipro
+    environment:
+      - 'APP_ENV=${APP_ENV}'
+      - 'APP_DEBUG=${APP_DEBUG}'
+      - 'APP_URL=${APP_URL}'
+      - 'DB_HOST=${DB_HOST}'
+      - 'DB_CONNECTION=${DB_CONNECTION}'
+      - 'DB_USERNAME=${DB_USERNAME}'
+      - 'DB_PASSWORD=${DB_PASSWORD}'
+      - 'DB_DATABASE=${DB_DATABASE}'
+      - 'CACHE_DRIVER=${CACHE_DRIVER}'
+      - 'SESSION_DRIVER=${SESSION_DRIVER}'
+    working_dir: /var/www/html
+    volumes:
+      - app:/var/www/html
+    depends_on:
+      - db
+      - redis
+
+  ####################################################################################################
+  # Nginx
+  ####################################################################################################
+  nginx:
+    restart: unless-stopped
+    container_name: bipro_nginx
+    image: nginx:1.23.3-alpine-slim
+    volumes_from:
+      - app
+    ports:
+      - 8088:80
+    volumes:
+      # - app:/var/www/html
+      - .docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - .docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - app
+
+  ####################################################################################################
+  # DATABASE (PgSQL)
+  ####################################################################################################
+  db:
+    restart: unless-stopped
+    container_name: bipro_pgsql
+    image: 'postgres:15'
+    environment:
+      PGPASSWORD: '${DB_PASSWORD:-secret}'
+      POSTGRES_DB: '${DB_DATABASE}'
+      POSTGRES_USER: '${DB_USERNAME}'
+      POSTGRES_PASSWORD: '${DB_PASSWORD:-secret}'
+    volumes:
+      - .docker/db/data:/var/lib/postgresql/data
+      - .docker/logs:/var/log/postgresql
+    healthcheck:
+      test:
+        - CMD
+        - pg_isready
+        - '-q'
+        - '-d'
+        - '${DB_DATABASE}'
+        - '-U'
+        - '${DB_USERNAME}'
+      retries: 3
+      timeout: 5s
+
+  redis:
+    image: 'redis:alpine3.18'
+    volumes:
+      - '.docker/redis:/data'
+    healthcheck:
+      test:
+        - CMD
+        - redis-cli
+        - ping
+      retries: 3
+      timeout: 5s
+
+  # minio:
+  #   restart: unless-stopped
+  #   image: 'minio/minio:latest'
+  #   ports:
+  #     - '${FORWARD_MINIO_PORT:-567}:9000'
+  #     - '${FORWARD_MINIO_CONSOLE_PORT:-568}:8900'
+  #   environment:
+  #     MINIO_ROOT_USER: root
+  #     MINIO_ROOT_PASSWORD: password
+  #   volumes:
+  #     - .docker/minio:/data/minio
+  #   command: 'minio server /data/minio --console-address ":${FORWARD_MINIO_CONSOLE_PORT:-568}"'
+  #   healthcheck:
+  #     test:
+  #       - CMD
+  #       - curl
+  #       - '-f'
+  #       - 'http://localhost:${FORWARD_MINIO_PORT:-567}/minio/health/live'
+  #     retries: 3
+  #     timeout: 5s
+
+  supervisor:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: .docker/supervisor/Dockerfile
+    container_name: supervisor
+    environment:
+      - 'APP_ENV=${APP_ENV}'
+      - 'APP_DEBUG=${APP_DEBUG}'
+      - 'APP_URL=${APP_URL}'
+      - 'DB_HOST=${DB_HOST}'
+      - 'DB_CONNECTION=${DB_CONNECTION}'
+      - 'DB_USERNAME=${DB_USERNAME}'
+      - 'DB_PASSWORD=${DB_PASSWORD}'
+      - 'DB_DATABASE=${DB_DATABASE}'
+      - 'CACHE_DRIVER=${CACHE_DRIVER}'
+      - 'SESSION_DRIVER=${SESSION_DRIVER}'
+    volumes_from:
+      - app
+    volumes:
+      - .docker/supervisor/supervisord.conf:/etc/supervisor/supervisord.conf
+    command: '/usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf'
+
+volumes:
+  app:
+
+networks:
+  default:
+    name: nginx-network
+    external: true

@@ -1,0 +1,12 @@
+diff --git a/src/Testing/AssertableInertia.php b/src/Testing/AssertableInertia.php
+index 370e748..a67bcd3 100644
+--- a/src/Testing/AssertableInertia.php
++++ b/src/Testing/AssertableInertia.php
+@@ -48,6 +48,7 @@ class AssertableInertia extends AssertableJson
+ 
+         if ($shouldExist || (is_null($shouldExist) && config('inertia.testing.ensure_pages_exist', true))) {
+             try {
++                $value = resolvePage($value, true);
+                 app('inertia.testing.view-finder')->find($value);
+             } catch (InvalidArgumentException $exception) {
+                 PHPUnit::fail(sprintf('Inertia page component file [%s] does not exist.', $value));

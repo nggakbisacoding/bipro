@@ -1,0 +1,6 @@
+*
+!public/
+!exports/
+!templates/
+!templates/*
+!.gitignore

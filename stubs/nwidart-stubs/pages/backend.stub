@@ -1,0 +1,12 @@
+import { Head } from "@inertiajs/react";
+import { PageProps } from "@/types";
+
+export default function $STUDLY_NAME$({ auth }: PageProps) {
+    return (
+        <>
+            <Head title="$STUDLY_NAME$" />
+
+            <span>$STUDLY_NAME$ Admin</span>
+        </>
+    );
+}
